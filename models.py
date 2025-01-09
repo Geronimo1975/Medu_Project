@@ -14,6 +14,8 @@ class User(UserMixin, db.Model):
     courses = db.relationship('UserCourse', backref='user', lazy=True)
     forum_posts = db.relationship('ForumPost', backref='author', lazy=True)
     quizzes_taken = db.relationship('QuizAttempt', backref='user', lazy=True)
+    learning_preferences = db.Column(db.JSON)  # Store learning style preferences
+    recommended_paths = db.relationship('LearningPath', backref='user', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -31,6 +33,27 @@ class Course(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     enrolled_users = db.relationship('UserCourse', backref='course', lazy=True)
     quizzes = db.relationship('Quiz', backref='course', lazy=True)
+    prerequisites = db.Column(db.JSON)  # Store prerequisite course IDs
+    skills_taught = db.Column(db.JSON)  # Store skills covered in the course
+
+class LearningPath(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    path_items = db.relationship('LearningPathItem', backref='learning_path', lazy=True)
+    difficulty_level = db.Column(db.String(20))  # beginner, intermediate, advanced
+    estimated_duration = db.Column(db.Integer)  # in hours
+
+class LearningPathItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    path_id = db.Column(db.Integer, db.ForeignKey('learning_path.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
+    order = db.Column(db.Integer, nullable=False)  # Sequence in the learning path
+    status = db.Column(db.String(20), default='pending')  # pending, in_progress, completed
+    required = db.Column(db.Boolean, default=True)
 
 class Quiz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -67,6 +90,7 @@ class UserCourse(db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
     enrolled_date = db.Column(db.DateTime, default=datetime.utcnow)
     completed = db.Column(db.Boolean, default=False)
+    progress = db.Column(db.Float, default=0.0)  # Track progress percentage
 
 class ForumPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)

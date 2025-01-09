@@ -21,6 +21,7 @@ def create_app():
     from routes.forum import forum_bp
     from routes.quiz import quiz_bp
     from routes.dashboard import dashboard_bp
+    from routes.recommendations import recommendations_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
@@ -28,6 +29,7 @@ def create_app():
     app.register_blueprint(forum_bp)
     app.register_blueprint(quiz_bp)
     app.register_blueprint(dashboard_bp)
+    app.register_blueprint(recommendations_bp)
 
     # Create database tables
     with app.app_context():
