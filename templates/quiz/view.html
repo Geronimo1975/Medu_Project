@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}{{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('courses.view', course_id=quiz.course.id) }}">{{ quiz.course.title }}</a></li>
+                    <li class="breadcrumb-item active">{{ quiz.title }}</li>
+                </ol>
+            </nav>
+
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">{{ quiz.title }}</h1>
+                    <p class="card-text">{{ quiz.description }}</p>
+                    
+                    <div class="quiz-info mb-4">
+                        <span class="badge bg-info me-2">{{ quiz.language|upper }}</span>
+                        <span class="badge bg-primary">{{ quiz.difficulty|title }}</span>
+                    </div>
+
+                    <div id="quizContainer">
+                        {% for question in quiz.questions %}
+                        <div class="question-card mb-4" data-question-id="{{ question.id }}">
+                            <h5 class="mb-3">{{ question.question_text }}</h5>
+                            
+                            {% if question.type == 'multiple_choice' %}
+                                {% for option in question.options %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" 
+                                           name="question_{{ question.id }}" 
+                                           value="{{ option }}"
+                                           id="option_{{ question.id }}_{{ loop.index }}">
+                                    <label class="form-check-label" for="option_{{ question.id }}_{{ loop.index }}">
+                                        {{ option }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            {% elif question.type == 'true_false' %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" 
+                                           name="question_{{ question.id }}" 
+                                           value="true"
+                                           id="true_{{ question.id }}">
+                                    <label class="form-check-label" for="true_{{ question.id }}">True</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" 
+                                           name="question_{{ question.id }}" 
+                                           value="false"
+                                           id="false_{{ question.id }}">
+                                    <label class="form-check-label" for="false_{{ question.id }}">False</label>
+                                </div>
+                            {% else %}
+                                <div class="form-group">
+                                    <textarea class="form-control" 
+                                              name="question_{{ question.id }}" 
+                                              rows="3"></textarea>
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-primary" id="submitQuiz">
+                                Submit Quiz
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('submitQuiz').addEventListener('click', function() {
+    const answers = {};
+    const questions = document.querySelectorAll('.question-card');
+    
+    questions.forEach(question => {
+        const questionId = question.dataset.questionId;
+        const input = question.querySelector('input[type="radio"]:checked, textarea');
+        if (input) {
+            answers[questionId] = input.value;
+        }
+    });
+
+    fetch(`{{ url_for('quiz.submit_quiz', quiz_id=quiz.id) }}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(answers)
+    })
+    .then(response => response.json())
+    .then(data => {
+        window.location.href = `{{ url_for('quiz.quiz_results', quiz_id=quiz.id) }}`;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while submitting the quiz');
+    });
+});
+</script>
+{% endblock %}

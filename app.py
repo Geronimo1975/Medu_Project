@@ -19,11 +19,13 @@ def create_app():
     from routes.auth import auth_bp
     from routes.courses import courses_bp
     from routes.forum import forum_bp
+    from routes.quiz import quiz_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(courses_bp)
     app.register_blueprint(forum_bp)
+    app.register_blueprint(quiz_bp)
 
     # Create database tables
     with app.app_context():

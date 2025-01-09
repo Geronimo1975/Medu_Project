@@ -13,6 +13,7 @@ class User(UserMixin, db.Model):
     is_admin = db.Column(db.Boolean, default=False)
     courses = db.relationship('UserCourse', backref='user', lazy=True)
     forum_posts = db.relationship('ForumPost', backref='author', lazy=True)
+    quizzes_taken = db.relationship('QuizAttempt', backref='user', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -29,6 +30,36 @@ class Course(db.Model):
     category = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     enrolled_users = db.relationship('UserCourse', backref='course', lazy=True)
+    quizzes = db.relationship('Quiz', backref='course', lazy=True)
+
+class Quiz(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text)
+    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
+    language = db.Column(db.String(2), nullable=False, default='en')
+    difficulty = db.Column(db.String(20))  # easy, medium, hard
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    questions = db.relationship('Question', backref='quiz', lazy=True)
+    attempts = db.relationship('QuizAttempt', backref='quiz', lazy=True)
+
+class Question(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)
+    question_text = db.Column(db.Text, nullable=False)
+    explanation = db.Column(db.Text)
+    correct_answer = db.Column(db.Text, nullable=False)
+    options = db.Column(db.JSON)  # Store multiple choice options as JSON
+    type = db.Column(db.String(20))  # multiple_choice, true_false, open_ended
+
+class QuizAttempt(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)
+    score = db.Column(db.Float)
+    answers = db.Column(db.JSON)  # Store user's answers as JSON
+    started_at = db.Column(db.DateTime, default=datetime.utcnow)
+    completed_at = db.Column(db.DateTime)
 
 class UserCourse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
