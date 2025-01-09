@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center py-5" style="background-image: url('https://images.unsplash.com/photo-1527613426441-4da17471b66d'); background-size: cover;">
+    <div class="container">
+        <h1 class="display-4 text-white">Welcome to MeduApp</h1>
+        <p class="lead text-white">Your gateway to medical education excellence</p>
+        <a href="{{ url_for('courses.catalog') }}" class="btn btn-primary btn-lg">Explore Courses</a>
+    </div>
+</div>
+
+<section class="features py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Why Choose MeduApp?</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-graduation-cap fa-3x mb-3"></i>
+                        <h5 class="card-title">Quality Education</h5>
+                        <p class="card-text">Access premium medical courses taught by experienced professionals.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-globe fa-3x mb-3"></i>
+                        <h5 class="card-title">Multi-language Support</h5>
+                        <p class="card-text">Learn in English, French, Spanish, or German.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-users fa-3x mb-3"></i>
+                        <h5 class="card-title">Community</h5>
+                        <p class="card-text">Join a thriving community of medical students and professionals.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="featured-courses py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Featured Courses</h2>
+        <div class="row">
+            {% for course in courses %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <p class="card-text">{{ course.description[:100] }}...</p>
+                        {% if course.is_premium %}
+                        <span class="badge bg-warning">Premium</span>
+                        {% else %}
+                        <span class="badge bg-success">Free</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('courses.view', course_id=course.id) }}" class="btn btn-primary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="cta py-5">
+    <div class="container text-center">
+        <h2>Ready to Start Learning?</h2>
+        <p class="lead">Join thousands of medical students advancing their careers with MeduApp.</p>
+        {% if not current_user.is_authenticated %}
+        <a href="{{ url_for('auth.register') }}" class="btn btn-success btn-lg">Sign Up Now</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

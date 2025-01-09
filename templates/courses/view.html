@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('courses.catalog') }}">Courses</a></li>
+                    <li class="breadcrumb-item active">{{ course.title }}</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4">{{ course.title }}</h1>
+            
+            {% if course.is_premium %}
+                <span class="badge bg-warning mb-3">Premium Course</span>
+            {% else %}
+                <span class="badge bg-success mb-3">Free Course</span>
+            {% endif %}
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Course Description</h5>
+                    <p class="card-text">{{ course.description }}</p>
+                </div>
+            </div>
+
+            {% if current_user.is_authenticated and course in current_user.courses %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Your Progress</h5>
+                    <div class="progress">
+                        <div class="progress-bar" id="progress-{{ course.id }}" 
+                             role="progressbar" style="width: 0%" 
+                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-content">
+                <h3>Course Content</h3>
+                <div class="accordion" id="courseContent">
+                    <!-- Course sections would be dynamically generated here -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#section1">
+                                Section 1: Introduction
+                            </button>
+                        </h2>
+                        <div id="section1" class="accordion-collapse collapse show">
+                            <div class="accordion-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>
+                                            <i class="fas fa-play-circle me-2"></i>
+                                            Lesson 1: Course Overview
+                                        </span>
+                                        <span class="badge bg-success">Completed</span>
+                                    </li>
+                                    <!-- More lessons -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="card">
+                <div class="card-body text-center">
+                    {% if course.is_premium %}
+                        <h5 class="card-title">Premium Content</h5>
+                        <p class="card-text">Enroll in this course to access all content</p>
+                        <p class="h4 mb-4">${{ "%.2f"|format(course.price) }}</p>
+                        <button onclick="handlePayment({{ course.id }})" class="btn btn-primary btn-lg">
+                            Enroll Now
+                        </button>
+                    {% else %}
+                        <h5 class="card-title">Free Course</h5>
+                        <p class="card-text">Enroll to start learning</p>
+                        <form action="{{ url_for('courses.enroll', course_id=course.id) }}" method="POST">
+                            <button type="submit" class="btn btn-success btn-lg">Enroll Now</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Course Information</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-clock me-2"></i> Duration: 10 weeks
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-globe me-2"></i> Language: 
+                            {% for lang in ['en', 'fr', 'es', 'de'] %}
+                                {% if lang in course.languages %}
+                                    <span class="badge bg-info">{{ lang.upper() }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-users me-2"></i> Enrolled Students: {{ course.enrolled_users|length }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Share This Course</h5>
+                    <div class="d-flex justify-content-around">
+                        <a href="#" class="btn btn-outline-primary">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-info">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-success">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    // Stripe integration code is in app.js
+    {% if current_user.is_authenticated and course in current_user.courses %}
+    // Update progress when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        updateProgress({{ course.id }}, null);
+    });
+    {% endif %}
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+{
+    "name": "MeduApp",
+    "short_name": "MeduApp",
+    "description": "Medical Education Platform for Students",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2c3e50",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "https://cdnjs.cloudflare.com/ajax/libs/simple-icons/5.4.0/flask.svg",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ],
+    "lang": "en",
+    "dir": "ltr",
+    "prefer_related_applications": false,
+    "categories": ["education", "medical"],
+    "scope": "/"
+}

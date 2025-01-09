@@ -1,0 +1,125 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --light-gray: #f8f9fa;
+    --dark-gray: #343a40;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--dark-gray);
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: var(--primary-color) !important;
+}
+
+.hero-section {
+    padding: 100px 0;
+    background-color: rgba(0,0,0,0.6);
+    background-blend-mode: overlay;
+}
+
+.features .card {
+    transition: transform 0.3s ease;
+    border: none;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+.features .card:hover {
+    transform: translateY(-5px);
+}
+
+.features .fas {
+    color: var(--secondary-color);
+}
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-title {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.btn-primary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.social-links a {
+    color: var(--dark-gray);
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--secondary-color);
+}
+
+.footer {
+    background-color: var(--light-gray);
+    padding: 40px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 60px 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+}
+
+/* Course Cards */
+.course-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-card .card-body {
+    flex: 1;
+}
+
+/* Form Styling */
+.form-control:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+/* Badge Styling */
+.badge.bg-warning {
+    background-color: #f1c40f !important;
+    color: var(--dark-gray);
+}
+
+.badge.bg-success {
+    background-color: #2ecc71 !important;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
