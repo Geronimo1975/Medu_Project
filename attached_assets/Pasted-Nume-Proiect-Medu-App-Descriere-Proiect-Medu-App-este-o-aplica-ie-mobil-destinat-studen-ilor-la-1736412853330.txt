@@ -1,0 +1,77 @@
+Nume Proiect:
+Medu-App
+
+Descriere Proiect:
+Medu-App este o aplicație mobilă destinată studenților la medicină și absolvenților care se pregătesc pentru rezidențiat. Platforma oferă acces la cursuri online de chimie, fizică, anatomie, limba germană și tehnici de comunicare cu pacientul. În plus, aplicația oferă servicii de integrare în Europa, disponibile la cerere. Informațiile generale sunt gratuite, în timp ce accesul la cursuri și servicii avansate este contra cost. Interfața aplicației va fi disponibilă în limbile engleză, franceză, spaniolă și germană.
+
+Platforma Țintă:
+Aplicație mobilă (Android și iOS).
+
+Mediul de Operare:
+Online (conexiune la internet necesară).
+
+Opțiuni de Găzduire:
+Aplicația va fi găzduită pe un server propriu.
+
+Stilul Interfeței:
+Design inspirat de Education WP pentru a putea fi sincronizat cu WordPress. Interfața trebuie să fie profesională, modernă și ușor de utilizat.
+
+Rezultatele Așteptate:
+
+Generarea de înscrieri prin aplicație.
+Vânzarea de cursuri plătite.
+Funcții Suplimentare:
+
+Integrare cu rețele sociale: Facebook, Instagram, X (Twitter).
+Integrare cu platforme de mesagerie: WhatsApp și Telegram.
+Crearea unei comunități active prin grupuri pe Telegram.
+Preferințe Lingvistice:
+
+Limba de interacțiune cu Replit Agent: Engleză sau Română (preferabil Română dacă este disponibilă).
+Interfața aplicației va fi în: Engleză, Franceză, Spaniolă și Germană.
+Cu aceste informații, aplicația poate fi concepută conform cerințelor. Vrei să detaliem vreo secțiune sau să adaug funcționalități suplimentare?
+
+
+
+
+
+You said:
+Am omis partea cu backend care aș prefera să fie în Python
+ChatGPT said:
+
+Am actualizat promptul cu preferința pentru backend-ul scris în Python. Iată versiunea completă:
+
+Nume Proiect:
+Medu-App
+
+Descriere Proiect:
+Medu-App este o aplicație mobilă destinată studenților la medicină și absolvenților care se pregătesc pentru rezidențiat. Platforma oferă acces la cursuri online de chimie, fizică, anatomie, limba germană și tehnici de comunicare cu pacientul. În plus, aplicația oferă servicii de integrare în Europa, disponibile la cerere. Informațiile generale sunt gratuite, în timp ce accesul la cursuri și servicii avansate este contra cost. Interfața aplicației va fi disponibilă în limbile engleză, franceză, spaniolă și germană.
+
+Platforma Țintă:
+Aplicație mobilă (Android și iOS).
+
+Mediul de Operare:
+Online (conexiune la internet necesară).
+
+Opțiuni de Găzduire:
+Aplicația va fi găzduită pe un server propriu.
+
+Backend:
+Backend-ul aplicației va fi scris în Python, utilizând framework-uri moderne precum Django sau Flask pentru dezvoltare web și integrare API.
+
+Stilul Interfeței:
+Design inspirat de Education WP pentru a putea fi sincronizat cu WordPress. Interfața trebuie să fie profesională, modernă și ușor de utilizat.
+
+Rezultatele Așteptate:
+
+Generarea de înscrieri prin aplicație.
+Vânzarea de cursuri plătite.
+Funcții Suplimentare:
+
+Integrare cu rețele sociale: Facebook, Instagram, X (Twitter).
+Integrare cu platforme de mesagerie: WhatsApp și Telegram.
+Crearea unei comunități active prin grupuri pe Telegram.
+Preferințe Lingvistice:
+
+Limba de interacțiune cu Replit Agent: Engleză sau Română (preferabil Română dacă este disponibilă).
+Interfața aplicației va fi în: Engleză, Franceză, Spaniolă și Germană.
