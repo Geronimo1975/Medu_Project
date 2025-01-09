@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Performance Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Your Performance Dashboard</h1>
+
+    <div class="row mb-4">
+        <!-- Overall Statistics -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Overall Performance</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="mb-0">{{ "%.1f"|format(quiz_stats.average_score|default(0)) }}%</h2>
+                            <small class="text-muted">Average Score</small>
+                        </div>
+                        <div>
+                            <h2 class="mb-0">{{ quiz_stats.total_attempts|default(0) }}</h2>
+                            <small class="text-muted">Total Quizzes</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Language Performance -->
+        <div class="col-md-8">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Performance by Language</h5>
+                    <canvas id="languageChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <!-- Course Progress -->
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Course Progress</h5>
+                    {% for progress in course_progress %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>{{ progress.course.title }}</span>
+                            <span>{{ progress.completed_quizzes }}/{{ progress.total_quizzes }} Quizzes</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: {{ progress.progress }}%" 
+                                 aria-valuenow="{{ progress.progress }}" 
+                                 aria-valuemin="0" aria-valuemax="100">
+                                {{ "%.1f"|format(progress.progress) }}%
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Performance Trend -->
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Performance Trend (Last 30 Days)</h5>
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Language Performance Chart
+const languageCtx = document.getElementById('languageChart').getContext('2d');
+new Chart(languageCtx, {
+    type: 'bar',
+    data: {
+        labels: [{% for perf in language_performance %}'{{ perf.language|upper }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Average Score (%)',
+            data: [{% for perf in language_performance %}{{ perf.average_score }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100
+            }
+        }
+    }
+});
+
+// Performance Trend Chart
+const trendCtx = document.getElementById('trendChart').getContext('2d');
+new Chart(trendCtx, {
+    type: 'line',
+    data: {
+        labels: [{% for attempt in performance_trend %}'{{ attempt.completed_at.strftime("%Y-%m-%d") }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Quiz Scores (%)',
+            data: [{% for attempt in performance_trend %}{{ attempt.score }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            borderColor: 'rgba(75, 192, 192, 1)',
+            tension: 0.1,
+            fill: false
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100
+            }
+        }
+    }
+});
+</script>
+{% endblock %}
